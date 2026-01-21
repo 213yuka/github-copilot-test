@@ -45,8 +45,10 @@ class TodoApp:
         Args:
             description: タスクの説明
         """
+        # 既存の最大IDを取得し、+1する
+        max_id = max([task['id'] for task in self.tasks], default=0)
         task = {
-            'id': len(self.tasks) + 1,
+            'id': max_id + 1,
             'description': description,
             'completed': False,
             'created_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -91,9 +93,6 @@ class TodoApp:
         for i, task in enumerate(self.tasks):
             if task['id'] == task_id:
                 deleted_task = self.tasks.pop(i)
-                # IDを再割り当て
-                for j, t in enumerate(self.tasks):
-                    t['id'] = j + 1
                 self.save_tasks()
                 print(f"✓ タスクを削除しました: {deleted_task['description']}")
                 return
